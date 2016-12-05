@@ -1,5 +1,3 @@
-# hw-triple-weierstrass
-Hardware implementation of elliptic curve cryptography scalar multiplication
 # Implementing Complete Formulas on Weierstrass Curves in Hardware
 Scalar multiplication unit for Elliptic curve cryptography. This repository is for the upcoming work :
 
