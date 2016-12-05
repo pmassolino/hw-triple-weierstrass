@@ -1,3 +1,5 @@
+# hw-triple-weierstrass
+Hardware implementation of elliptic curve cryptography scalar multiplication
 # Implementing Complete Formulas on Weierstrass Curves in Hardware
 Scalar multiplication unit for Elliptic curve cryptography. This repository is for the upcoming work :
 
@@ -10,5 +12,3 @@ J. Renes, C. Costello, and L. Batina.  [Complete addition formulas for prime ord
 While the hardware Montgomery multipliers are based on :
 
 P. M. C. Massolino, L. Batina, R. Chaves, and N. Mentens. [Low Power Montgomery Modular Multiplication on Reconfigurable Systems](http://eprint.iacr.org/2016/280). Cryptology ePrint Archive, Report 2016/280, 2016.
-
-
