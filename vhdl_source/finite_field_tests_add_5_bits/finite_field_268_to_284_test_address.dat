@@ -1,0 +1,17 @@
+external_memory_base_address_n : integer := 0;
+external_memory_base_address_n_line : integer := 17;
+external_memory_base_address_r2 : integer := 18;
+external_memory_base_address_1 : integer := 35;
+external_memory_base_address_a : integer := 52;
+external_memory_base_address_b : integer := 69;
+external_memory_base_address_c : integer := 86;
+external_memory_base_address_d : integer := 103;
+external_memory_base_address_ar2 : integer := 120;
+external_memory_base_address_br2 : integer := 137;
+external_memory_base_address_cr2 : integer := 154;
+external_memory_base_address_dr2 : integer := 171;
+external_memory_base_address_ar2_br2 : integer := 188;
+external_memory_base_address_cr2_dr2 : integer := 205;
+external_memory_base_address_or2 : integer := 222;
+external_memory_base_address_o : integer := 239;
+external_memory_base_address_y : integer := 256;
