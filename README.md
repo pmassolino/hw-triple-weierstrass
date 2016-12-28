@@ -1,7 +1,7 @@
 # Implementing Complete Formulas on Weierstrass Curves in Hardware
 Scalar multiplication unit for Elliptic curve cryptography. This repository is for the upcoming work :
 
-Pedro Maat C. Massolino, Joost Renes, Lejla Batina. Implementing Complete Formulas on Weierstrass Curves in Hardware.
+Pedro Maat C. Massolino, Joost Renes, Lejla Batina. [Implementing Complete Formulas on Weierstrass Curves in Hardware](https://eprint.iacr.org/2016/1133). Security, Privacy, and Applied Cryptography Engineering. Volume 10076 of the series Lecture Notes in Computer Science pp 89-108, Berlin, Heidelberg, 2016. Springer Berlin Heidelberg.
 
 The scalar multiplication is based on the complete formulas for Weierstrass curves presented in :
 
