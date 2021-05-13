@@ -356,7 +356,7 @@ def test_montgomery_function_biggest_value(word_size, prime_size_bits, number_of
     d = 0
     
     test_montgomery_function_single_interaction(base_arithmetic, a, b, c, d)
-    print "Finished"
+    print("Finished")
 
 
 def test_montgomery_function(word_size, prime_size_bits, number_of_bits_added, number_of_tests, integer_mode=False, n=0):
@@ -364,21 +364,21 @@ def test_montgomery_function(word_size, prime_size_bits, number_of_bits_added, n
     n = base_arithmetic.get_prime()
     number_of_errors = 0
     if(integer_mode):
-        print "Starting " + str(number_of_tests) + " tests in Integer Mode"
+        print("Starting " + str(number_of_tests) + " tests in Integer Mode")
     else:
-        print "Starting " + str(number_of_tests) + " tests in List Mode"
+        print("Starting " + str(number_of_tests) + " tests in List Mode")
 
-    for i in xrange(number_of_tests):
+    for i in range(number_of_tests):
         if((i % 1000) == 0):
-            print "Iteration " + str(i)
+            print("Iteration " + str(i))
         a = Integer(randrange(0,n))
         b = Integer(randrange(0,n))
         c = Integer(randrange(0,n))
         d = Integer(randrange(0,n))
         
         number_of_errors += test_montgomery_function_single_interaction(base_arithmetic, a, b, c, d)
-    print "Number of errors " + str(number_of_errors)
-    print "Finished"
+    print("Number of errors " + str(number_of_errors))
+    print("Finished")
 
 def test_montgomery_function_special_mode(word_size, prime_size_bits, number_of_bits_added, number_of_tests, integer_mode=False, n=0):
     base_arithmetic = generate_base_arithmetic(word_size, prime_size_bits, number_of_bits_added + word_size, integer_mode, n)
@@ -388,20 +388,20 @@ def test_montgomery_function_special_mode(word_size, prime_size_bits, number_of_
     extended_arithmetic = generate_base_arithmetic(word_size, prime_size_bits+word_size, number_of_bits_added, integer_mode, special_n)
     number_of_errors = 0
     if(integer_mode):
-        print "Starting " + str(number_of_tests) + " tests in Integer Mode"
+        print("Starting " + str(number_of_tests) + " tests in Integer Mode")
     else:
-        print "Starting " + str(number_of_tests) + " tests in List Mode"
+        print("Starting " + str(number_of_tests) + " tests in List Mode")
     for i in range(number_of_tests):
         if((i % 1000) == 0):
-            print "Iteration " + str(i)
+            print("Iteration " + str(i))
         a = Integer(randrange(0,n))
         b = Integer(randrange(0,n))
         c = Integer(randrange(0,n))
         d = Integer(randrange(0,n))
         
         number_of_errors += test_montgomery_function_special_mode_single_interaction(base_arithmetic, extended_arithmetic, a, b, c, d)
-    print "Number of errors " + str(number_of_errors)
-    print "Finished"
+    print("Number of errors " + str(number_of_errors))
+    print("Finished")
 
     
 def print_VHDL_finite_field_tests(VHDL_memory_file_name, base_arithmetic, VHDL_values_address_file_name=""):
@@ -721,6 +721,11 @@ class base_arithmetic_integer:
             result = self._montgomery_multiplication(self.value, other.value)
         return self.__class__(self.arithmetic_parameters, result, False)
         
+    def __truediv__(self, other):
+        divisor = other._montgomery_inversion(other.value)
+        result = self._montgomery_multiplication(self.value, divisor)
+        return self.__class__(self.arithmetic_parameters, result, False)
+    
     def __div__(self, other):
         divisor = other._montgomery_inversion(other.value)
         result = self._montgomery_multiplication(self.value, divisor)
@@ -867,7 +872,12 @@ class base_arithmetic_list:
         else:
             result = self._montgomery_multiplication(self.value, other.value)
         return self.__class__(self.arithmetic_parameters, result, False)
-
+    
+    def __truediv__(self, other):
+        divisor = other._montgomery_inversion(other.value)
+        result = self._montgomery_multiplication(self.value, divisor)
+        return self.__class__(self.arithmetic_parameters, result, False)
+    
     def __div__(self, other):
         divisor = other._montgomery_inversion(other.value)
         result = self._montgomery_multiplication(self.value, divisor)

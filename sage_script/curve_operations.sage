@@ -1040,12 +1040,12 @@ def convert_edwards_projective_point_to_short_weierstrass_affine_point(finite_fi
     edwards_d = finite_field(curve_constants[0])
     edwards_e = finite_field(1)-edwards_d*edwards_c^4
     
-    montgomery_A = (finite_field(4)/edwards_e - finite_field(2))
-    montgomery_B = finite_field(1)/(edwards_e)
-    point_montgomery[0] = (edwards_c + affine_point[1])/(edwards_c - affine_point[1])
-    point_montgomery[1] = finite_field(2)*edwards_c*point_montgomery[0]/affine_point[0]
-    short_weistrass_affine_point[0] = (point_montgomery[0] + montgomery_A/finite_field(3))/montgomery_B
-    short_weistrass_affine_point[1] = point_montgomery[1]/montgomery_B
+    montgomery_A = (finite_field(4)*(edwards_e^(-1)) - finite_field(2))
+    montgomery_B = finite_field(1)*(edwards_e^(-1))
+    point_montgomery[0] = (edwards_c + affine_point[1])*((edwards_c - affine_point[1])^(-1))
+    point_montgomery[1] = finite_field(2)*edwards_c*point_montgomery[0]*(affine_point[0]^(-1))
+    short_weistrass_affine_point[0] = (point_montgomery[0] + montgomery_A*(finite_field(3)^(-1)))*(montgomery_B^(-1))
+    short_weistrass_affine_point[1] = point_montgomery[1]*(montgomery_B^(-1))
     return short_weistrass_affine_point
         
 def test_curve_scalar_multiplication_single_iteraction(finite_field, curve_parameters, scalar_multiplication, point_internal_system, point_short_weierstrass, scalar):
@@ -1095,14 +1095,14 @@ def test_curve_scalar_multiplication(curve_parameters, number_of_tests, underlyi
     generator_point_short_weierstrass = coordinate_system[2](finite_field, curve_parameters, generator_point_internal_system)
     generator_point_short_weierstrass = E(generator_point_short_weierstrass)
     number_of_errors = 0
-    for i in xrange(number_of_tests):
+    for i in range(number_of_tests):
         if((i % 100) == 0):
-            print "Iteration " + str(i)
+            print("Iteration " + str(i))
         scalar = Integer(randrange(1,E.order()))
         number_of_errors += test_curve_scalar_multiplication_single_iteraction(final_arithmetic, curve_parameters, scalar_multiplication, generator_point_internal_system, generator_point_short_weierstrass, scalar)
 
-    print "Number of errors " + str(number_of_errors)
-    print "Finished"
+    print("Number of errors " + str(number_of_errors))
+    print("Finished")
     
 def print_VHDL_ECC_scalar_test(VHDL_memory_file_name, curve_parameters, word_size, number_of_bits_added, scalar_multiplication=scalar_point_multiplication_1, VHDL_values_address_file_name=""):
     VHDL_memory_file = open(VHDL_memory_file_name, 'w')
@@ -1205,7 +1205,7 @@ def print_VHDL_all_ECC_scalar_tests(ECC_parameters, first_parameter, last_parame
         VHDL_values_address_file_name = ecc_folder + begin_file_name + str(ECC_parameters[i][0]) + end_values_address_file_name
         VHDL_memory_file_name = ecc_folder + begin_file_name + str(ECC_parameters[i][0]) + end_memory_file_name
         print_VHDL_ECC_scalar_test(VHDL_memory_file_name, ECC_parameters[i], word_size, number_of_bits_added, scalar_point_multiplication_1, VHDL_values_address_file_name)
-        print "ECC scalar test on " + ECC_parameters[i][0]
+        print("ECC scalar test on " + ECC_parameters[i][0])
     print("Finished")
     
 def load_VHDL_ECC_scalar_test(VHDL_memory_file_name, curve_parameters, word_size, number_of_bits_added, scalar_multiplication=scalar_point_multiplication_1):
@@ -1218,27 +1218,27 @@ def load_VHDL_ECC_scalar_test(VHDL_memory_file_name, curve_parameters, word_size
     value_loaded = load_list_VHDL_memory(VHDL_memory_file, word_size, Montgomery_n_num_words)
     value_internal = base_arithmetic.arithmetic_parameters[3]
     if(value_internal != value_loaded):
-        print "Primes does not match"
-        print "Prime inside :"
-        print value_internal
-        print "Prime read :"
-        print value_loaded     
+        print("Primes does not match")
+        print("Prime inside :")
+        print(value_internal)
+        print("Prime read :")
+        print(value_loaded)
     value_loaded = load_value_VHDL_memory(VHDL_memory_file, word_size, 1)
     value_internal = base_arithmetic.arithmetic_parameters[16]
     if(value_internal != value_loaded):
-        print "Prime' does not match"
-        print "Prime' inside :"
-        print value_internal
-        print "Prime' read :"
-        print value_loaded     
+        print("Prime' does not match")
+        print("Prime' inside :")
+        print(value_internal)
+        print("Prime' read :")
+        print(value_loaded)
     value_loaded = load_list_VHDL_memory(VHDL_memory_file, word_size, Montgomery_n_num_words)
     value_internal = base_arithmetic.arithmetic_parameters[13]
     if(value_internal != value_loaded):
-        print "R^2 does not match"
-        print "R^2 inside :"
-        print value_internal
-        print "R^2 read :"
-        print value_loaded     
+        print("R^2 does not match")
+        print("R^2 inside :")
+        print(value_internal)
+        print("R^2 read :")
+        print(value_loaded)
     
     curve_constants_internal_system = curve_parameters[4]
     
@@ -1248,15 +1248,15 @@ def load_VHDL_ECC_scalar_test(VHDL_memory_file_name, curve_parameters, word_size
         value_internal_without_r2 = base_arithmetic(curve_constants_internal_system[i]).get_value(True, False)
         value_internal_with_r2 = base_arithmetic(curve_constants_internal_system[i]).get_value(False, False)
         if((value_loaded_without_r2 != value_internal_without_r2) or (value_loaded_with_r2 != value_internal_with_r2)):
-            print "Curve constant " + str(i) + " does not match"
-            print "Value inside without r2 :"
-            print value_internal_without_r2
-            print "value read without r2 :"
-            print value_loaded_without_r2     
-            print "Value inside with r2 :"
-            print value_internal_with_r2
-            print "value read with r2 :"
-            print value_loaded_with_r2
+            print("Curve constant " + str(i) + " does not match")
+            print("Value inside without r2 :")
+            print(value_internal_without_r2)
+            print("value read without r2 :")
+            print(value_loaded_without_r2)
+            print("Value inside with r2 :")
+            print(value_internal_with_r2)
+            print("value read with r2 :")
+            print(value_loaded_with_r2)
             
     list_scalar = load_list_VHDL_memory(VHDL_memory_file, word_size, Montgomery_n_num_words)
     scalar = list_to_integer(word_size, Montgomery_n_num_words, list_scalar)
@@ -1269,15 +1269,15 @@ def load_VHDL_ECC_scalar_test(VHDL_memory_file_name, curve_parameters, word_size
         value_internal_without_r2 = base_arithmetic(generator_point_internal_system[i]).get_value(True, False)
         value_internal_with_r2 = base_arithmetic(generator_point_internal_system[i]).get_value(False, False)
         if((value_loaded_without_r2 != value_internal_without_r2) or (value_loaded_with_r2 != value_internal_with_r2)):
-            print "Curve point to compute " + str(i) + " does not match"
-            print "Value inside without r2 :"
-            print value_internal_without_r2
-            print "value read without r2 :"
-            print value_loaded_without_r2     
-            print "Value inside with r2 :"
-            print value_internal_with_r2
-            print "value read with r2 :"
-            print value_loaded_with_r2
+            print("Curve point to compute " + str(i) + " does not match")
+            print("Value inside without r2 :")
+            print(value_internal_without_r2)
+            print("value read without r2 :")
+            print(value_loaded_without_r2)
+            print("Value inside with r2 :")
+            print(value_internal_with_r2)
+            print("value read with r2 :")
+            print(value_loaded_with_r2)
             
     test_curve_private_point = scalar_multiplication(base_arithmetic, curve_parameters, generator_point_internal_system, scalar)
     test_curve_private_point_short_weierstrass = coordinate_system[2](base_arithmetic, curve_parameters, test_curve_private_point)
@@ -1288,15 +1288,15 @@ def load_VHDL_ECC_scalar_test(VHDL_memory_file_name, curve_parameters, word_size
         value_internal_without_r2 = base_arithmetic(test_curve_private_point[i]).get_value(True, False)
         value_internal_with_r2 = base_arithmetic(test_curve_private_point[i]).get_value(False, False)
         if((value_loaded_without_r2 != value_internal_without_r2) or (value_loaded_with_r2 != value_internal_with_r2)):
-            print "Test curve point in the internal coordinate system " + str(i) + " does not match"
-            print "Value inside without r2 :"
-            print value_internal_without_r2
-            print "value read without r2 :"
-            print value_loaded_without_r2     
-            print "Value inside with r2 :"
-            print value_internal_with_r2
-            print "value read with r2 :"
-            print value_loaded_with_r2
+            print("Test curve point in the internal coordinate system " + str(i) + " does not match")
+            print("Value inside without r2 :")
+            print(value_internal_without_r2)
+            print("value read without r2 :")
+            print(value_loaded_without_r2)
+            print("Value inside with r2 :")
+            print(value_internal_with_r2)
+            print("value read with r2 :")
+            print(value_loaded_with_r2)
             
     for i in range(len(test_curve_private_point_short_weierstrass)):
         value_loaded_without_r2 = load_list_VHDL_memory(VHDL_memory_file, word_size, Montgomery_n_num_words)
@@ -1304,15 +1304,15 @@ def load_VHDL_ECC_scalar_test(VHDL_memory_file_name, curve_parameters, word_size
         value_internal_without_r2 = base_arithmetic(test_curve_private_point_short_weierstrass[i]).get_value(True, False)
         value_internal_with_r2 = base_arithmetic(test_curve_private_point_short_weierstrass[i]).get_value(False, False)
         if((value_loaded_without_r2 != value_internal_without_r2) or (value_loaded_with_r2 != value_internal_with_r2)):
-            print "Test curve point in affine " + str(i) + " does not match"
-            print "Value inside without r2 :"
-            print value_internal_without_r2
-            print "value read without r2 :"
-            print value_loaded_without_r2     
-            print "Value inside with r2 :"
-            print value_internal_with_r2
-            print "value read with r2 :"
-            print value_loaded_with_r2
+            print("Test curve point in affine " + str(i) + " does not match")
+            print("Value inside without r2 :")
+            print(value_internal_without_r2)
+            print("value read without r2 :")
+            print(value_loaded_without_r2)
+            print("Value inside with r2 :")
+            print(value_internal_with_r2)
+            print("value read with r2 :")
+            print(value_loaded_with_r2)
         
     VHDL_memory_file.close()
     
@@ -2651,3 +2651,7 @@ edwards_projective_coordinate
 ]
 
 test_curve_scalar_multiplication(ECC_parameters[0], 100000, 1)
+
+#for each_ECC_parameter in ECC_parameters:
+#    print("Curve:" + each_ECC_parameter[0])
+#    test_curve_scalar_multiplication(each_ECC_parameter, 100, 1)
